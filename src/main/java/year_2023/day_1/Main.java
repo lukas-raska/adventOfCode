@@ -1,4 +1,4 @@
-package day_1;
+package year_2023.day_1;
 
 import java.io.IOException;
 import java.nio.file.Files;
