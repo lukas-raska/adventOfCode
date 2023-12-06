@@ -25,7 +25,7 @@ public class Main {
             for (String card : fetchedCards) {
                 partOneResult += getTotalPoints(card);
             }
-            //part two
+            //part two (nutno předělat, dává správný výsledek, ale děsně neefektivně)
             partTwoResult = countCardsWon(fetchedCards);
 
         } catch (IOException e) {
