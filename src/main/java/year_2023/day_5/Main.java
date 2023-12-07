@@ -15,7 +15,7 @@ import java.util.stream.LongStream;
 
 public class Main {
 
-    public static Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_5", "demo.txt");
+    public static Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_5", "input.txt");
 
     public static void main(String[] args) {
         LocalDateTime start = LocalDateTime.now();
@@ -143,9 +143,8 @@ public class Main {
         long soilNumber, fertilizerNumber, waterNumber, lightNumber, temperatureNumber, humidityNumber, locationNumber;
         List<Long> locationsList = new ArrayList<>();
 
-        //part one
+        //part one - OK
         for (long seed : seeds) {
-
             soilNumber = mapper(seed, seedToSoilMapList);
             fertilizerNumber = mapper(soilNumber, soilToFertilizerMapList);
             waterNumber = mapper(fertilizerNumber, fertilizerToWaterMapList);
@@ -156,12 +155,18 @@ public class Main {
             locationsList.add(locationNumber);
         }
 
-        //part two - nutno předělat -- neefektivní
+        //part two - nutno předělat --
         long locationMinimumPartTwo = Long.MAX_VALUE;
 
         for (SeedRange seedRange : seedsForPartTwo) {
 
-            Long currentMinimum = LongStream.range(seedRange.getStartOfRange(), seedRange.getEndOfRange())
+
+
+        }
+
+
+//            neefektivní NEHLEDAT CELÝM CYKLEM,ALE POUZE V HRANIČNÍCH BODECH!
+           /* Long currentMinimum = LongStream.range(seedRange.getStartOfRange(), seedRange.getEndOfRange())
                     .map(seed -> mapper(seed, seedToSoilMapList))
                     .map(soil -> mapper(soil, soilToFertilizerMapList))
                     .map(fertilizer -> mapper(fertilizer, fertilizerToWaterMapList))
@@ -170,12 +175,11 @@ public class Main {
                     .map(temperature -> mapper(temperature, temperatureToHumidityMapList))
                     .map(humidity -> mapper(humidity, humidityToLocationMapList))
                     .min()
-                    .getAsLong();
+                    .getAsLong();*/
 
-            if (currentMinimum<locationMinimumPartTwo){
+            /*if (currentMinimum<locationMinimumPartTwo){
                 locationMinimumPartTwo=currentMinimum;
-            }
-        }
+            }*/
 
         System.out.println("\nThe answer of day 5");
         System.out.println("Part one: " + locationsList.stream().min(Long::compareTo).get());
@@ -197,4 +201,6 @@ public class Main {
         }
         return targetNumber;
     }
+
+
 }
