@@ -22,37 +22,29 @@ public class Main {
 
     }
 
-    // ^ - sever - y++
-    // v - jih - y--
-    // > - východ x++
-    // < - západ x--
-
     public static int countGiftedHouses(String path) {
         int count = 1;
-        int x = 0, y = 0;
+        Location current = new Location(0, 0);
 
-        int[] current = new int[]{x, y};
-        Set<int[]> visited = new HashSet<>();
-        visited.add(current);
+
+        Set<Location> visited = new HashSet<>();
+        visited.add(new Location(0, 0));
 
         for (char direction : path.toCharArray()) {
 
             switch (direction) {
-                case '^' -> y++;
-                case 'v' -> y--;
-                case '<' -> x--;
-                case '>' -> x++;
+                case '^' -> current.moveNorth();
+                case 'v' -> current.moveSouth();
+                case '<' -> current.moveWest();
+                case '>' -> current.moveEast();
             }
 
-            int newX = x;
-            int newY = y;
-
             if (visited.stream()
-                    .noneMatch(coordinates -> coordinates[0] == newX && coordinates[1] == newY)) {
+                    .noneMatch(loc -> loc.getX() == current.getX() && loc.getY() == current.getY())) {
                 count++;
             }
 
-            visited.add(new int[]{newX, newY});
+            visited.add(new Location(current.getX(), current.getY()));
         }
 
         return count;
