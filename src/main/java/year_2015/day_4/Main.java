@@ -31,17 +31,18 @@ public class Main {
 
         //solution
         System.out.println("The answer of the day 4:");
-        System.out.println("\tPart one : " + getNumber(INPUT));
-
+        System.out.println("\tPart one : " + getNumber(INPUT, "00000"));
+        System.out.println("\tPart two : " + getNumber(INPUT, "000000"));
 
 
     }
 
-    private static int getNumber(String input) throws NoSuchAlgorithmException {
+    private static int getNumber(String input,
+                                 String hashPrefix) throws NoSuchAlgorithmException {
         String hash = "";
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
             hash = getMD5Hash(input + i);
-            if (hash.startsWith("00000")) {
+            if (hash.startsWith(hashPrefix)) {
                 return i;
             }
         }
