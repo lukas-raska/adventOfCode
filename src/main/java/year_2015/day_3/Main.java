@@ -16,37 +16,44 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //answer = 2081
-        System.out.println("The answer of day 3: " + countGiftedHouses(PATH));
-        //  System.out.println("Délka vstupu: " + length);
-
+        //answer (part1) = 2081
+        //answer (part2) = 2341
+        String path = PATH;
+        System.out.println("The answer of day 3");
+        System.out.println("Part one: " + countGiftedHouses(path, false));
+        System.out.println("Part two: " + countGiftedHouses(path, true));
     }
 
-    public static int countGiftedHouses(String path) {
+    public static int countGiftedHouses(String path,
+                                        boolean withRoboSanta) {
+
         int count = 1;
-        Location current = new Location(0, 0);
+        Set<Location> visitedHouses = new HashSet<>(Set.of(new Location(0, 0)));
+        Santa santa = new Santa();
+        Santa roboSanta = new Santa();
 
+        int index = 0;
+        while (index < path.length()) {
 
-        Set<Location> visited = new HashSet<>();
-        visited.add(new Location(0, 0));
+            santa.move(path.charAt(index));
 
-        for (char direction : path.toCharArray()) {
-
-            switch (direction) {
-                case '^' -> current.moveNorth();
-                case 'v' -> current.moveSouth();
-                case '<' -> current.moveWest();
-                case '>' -> current.moveEast();
-            }
-
-            if (visited.stream()
-                    .noneMatch(loc -> loc.getX() == current.getX() && loc.getY() == current.getY())) {
+            if (!visitedHouses.contains(santa.getCurrent())) {
                 count++;
             }
+            visitedHouses.add(new Location(santa.getCurrent()));
+            index++;
 
-            visited.add(new Location(current.getX(), current.getY()));
+            if (withRoboSanta && index < path.length()) {
+
+                roboSanta.move(path.charAt(index));
+
+                if (!visitedHouses.contains(roboSanta.getCurrent())) {
+                    count++;
+                }
+                visitedHouses.add(new Location(roboSanta.getCurrent()));
+                index++;
+            }
         }
-
         return count;
     }
 }
