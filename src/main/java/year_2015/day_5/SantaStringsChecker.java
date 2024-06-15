@@ -3,6 +3,7 @@ package year_2015.day_5;
 public class SantaStringsChecker {
 
     private static final String VOWELS = "aeiou";
+    private static final String [] EXCLUDED_STRINGS = new String[] {"ab","cd","pq","xy"}    ;
 
      boolean containsAtLeastThreeVowels(String string) {
 
@@ -23,5 +24,18 @@ public class SantaStringsChecker {
             }
         }
         return false;
+    }
+
+    boolean containsGivenStrings(String string, String [] comparisons){
+         for (String comparison : comparisons) {
+             if (string.contains(comparison)) {
+                 return true;
+             }
+         }
+         return false;
+    }
+
+    boolean doesNotContainsExcludedStrings(String string){
+         return !containsGivenStrings(string, EXCLUDED_STRINGS);
     }
 }
