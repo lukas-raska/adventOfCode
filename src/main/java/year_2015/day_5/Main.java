@@ -6,16 +6,19 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final String[] TEST_DATA = {"ugknbfddgicrmopn", "jchzalrnumimnmhp", "haegwjzuvuyypxyu",
+    private static final String[] TEST_DATA_1 = {"ugknbfddgicrmopn", "jchzalrnumimnmhp", "haegwjzuvuyypxyu",
             "dvszwmarrgswjxmb"};
+    private static final String[] TEST_DATA_2 = {"qjhvhtzxzqqjkmpb", "xxyxx", "uurcxstgmygtbstg",
+            "ieodomkazucvgmuy"};
 
     public static void main(String[] args) throws FileNotFoundException {
 
         SantaStringsChecker checker = new SantaStringsChecker();
 
-//        for (String data : TEST_DATA) {
-//            System.out.println(data + " is nice? : " + checker.isNice(data));
-//        }
+        //testing part one
+        for (String data : TEST_DATA_1) {
+            System.out.println(data + " is nice? : " + checker.isNice(data,1));
+        }
 
         File input = new File("src/main/java/year_2015/day_5/input.txt");
         Scanner scanner = new Scanner(input);
@@ -24,7 +27,7 @@ public class Main {
 
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
-            if (checker.isNice(line)){
+            if (checker.isNice(line,1)){
                 counter++;
             }
         }
