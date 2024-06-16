@@ -40,15 +40,44 @@ public class SantaStringsChecker {
         return !containsGivenStrings(string, EXCLUDED_STRINGS);
     }
 
+    //part two methods
+    private boolean containsPair(String string) {
+
+        if (string.length() >= 4) {
+
+            for (int i = 0; i < string.length() - 3; i++) {
+                String tested = string.substring(i, i + 2);
+                String rest = string.substring(i + 2);
+                if (rest.contains(tested)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean hasRepeatedLetter(String string) {
+
+        if (string.length() >= 3) {
+            for (int i = 0; i < string.length() - 2; i++) {
+                String tested = string.substring(i, i + 3);
+                if (tested.charAt(0) == tested.charAt(2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     boolean isNice(String string,
                    int level) {
 
-            return switch (level) {
-                case 1 -> containsAtLeastThreeVowels(string) &&
-                        containsDoubledLetter(string) &&
-                        doesNotContainsExcludedStrings(string);
-                case 2 -> false;
-                default -> throw new IllegalArgumentException("Unrecognized level: " + level);
-            };
+        return switch (level) {
+            case 1 -> containsAtLeastThreeVowels(string) &&
+                    containsDoubledLetter(string) &&
+                    doesNotContainsExcludedStrings(string);
+            case 2 ->   hasRepeatedLetter(string) && containsPair(string);
+            default -> throw new IllegalArgumentException("Unrecognized level: " + level);
+        };
     }
 }
