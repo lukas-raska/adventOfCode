@@ -2,7 +2,6 @@ package year_2015.day_5;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
 import java.util.Scanner;
 
 public class Main {
