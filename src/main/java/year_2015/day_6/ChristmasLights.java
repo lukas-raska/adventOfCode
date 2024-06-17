@@ -7,7 +7,7 @@ public class ChristmasLights {
 
     private static final int COLUMNS = 1000;
     private static final int ROWS = 1000;
-    private Light[][] lights;
+    private final Light[][] lights;
 
 
     public ChristmasLights() {
@@ -41,15 +41,28 @@ public class ChristmasLights {
                 .count();
     }
 
-    public void changeLights(Point from,
-                             Point to,
-                             String action) {
+
+
+    public void processAction(LightsAction action) {
+
+        Point from = action.getFrom();
+        Point to = action.getTo();
+        String actionName = action.getAction();
 
         for (int i = from.y(); i <= to.y(); i++) {
             for (int j = from.x(); j <= to.x(); j++) {
-                lights[j][i].process(action);
+                lights[j][i].process(actionName);
             }
         }
+    }
+
+
+    public int totalBrightness(){
+       return Arrays.stream(this.lights)
+               .flatMap(Arrays::stream)
+               .mapToInt(Light::getBrightness)
+               .sum();
+
     }
 
     public void print() {

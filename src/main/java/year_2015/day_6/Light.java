@@ -4,6 +4,8 @@ public class Light {
 
     private final Point point;
     private boolean turnedOn;
+    private int brightness;
+
 
     Light(Point point) {
         this(point.x(), point.y());
@@ -13,10 +15,15 @@ public class Light {
           int y) {
         this.point = new Point(x, y);
         turnedOn = false;
+        brightness = 0;
     }
 
     public Point getPoint() {
         return point;
+    }
+
+    public int getBrightness() {
+        return brightness;
     }
 
     public boolean isTurnedOn() {
@@ -30,15 +37,18 @@ public class Light {
 
     public void turnOn() {
         turnedOn = true;
+        brightness++;
     }
 
     public void turnOff() {
         turnedOn = false;
+        brightness = Math.max(0, brightness - 1);
 
     }
 
     public void toggle() {
         turnedOn = !turnedOn;
+        brightness = brightness + 2;
     }
 
     public void process(String action) {
@@ -49,6 +59,7 @@ public class Light {
             default -> throw new RuntimeException("Invalid action: " + action);
         }
     }
+
 
     @Override
     public String toString() {

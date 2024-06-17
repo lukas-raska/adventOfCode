@@ -15,13 +15,11 @@ public class Main {
 
         while (scanner.hasNextLine()) {
             LightsAction action = LightsAction.of(scanner.nextLine());
-            christmasLights.changeLights(
-                    action.getFrom(),
-                    action.getTo(),
-                    action.getAction());
+            christmasLights.processAction(action);
         }
 
         System.out.println("Answer of day 6:");
-        System.out.println("Part one: " + christmasLights.countTurnedOnLights());
+        System.out.println("Part one (turned on lights): " + christmasLights.countTurnedOnLights());
+        System.out.println("Part two (total brightness): " + christmasLights.totalBrightness());
     }
 }
