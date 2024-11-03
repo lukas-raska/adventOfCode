@@ -8,20 +8,21 @@ import java.util.List;
 
 public class Main {
 
-    public static final Path relativePath = Paths.get("src", "main", "java", "year_2015", "day_1","input.txt");
+    public static final Path relativePath = Paths.get("src", "main", "java", "year_2015", "day_1", "input.txt");
+
     public static void main(String[] args) {
 
         int floorLevel = 0;
         int numberOfStepsToBasement = 0;
 
-         try {
-             List<String> fetchedLines = Files.readAllLines(relativePath.toAbsolutePath());
-             for (String line: fetchedLines){
-                 floorLevel+=countFloor(line);
-                 numberOfStepsToBasement = findNumberOfStepsToBasement(line);
-             }
+        try {
+            List<String> fetchedLines = Files.readAllLines(relativePath.toAbsolutePath());
+            for (String line : fetchedLines) {
+                floorLevel += countFloor(line);
+                numberOfStepsToBasement = findNumberOfStepsToBasement(line);
+            }
 
-         }catch (IOException exception){
+        } catch (IOException exception) {
             System.err.println("File reading error: " + exception.getMessage());
         }
 
@@ -30,31 +31,31 @@ public class Main {
         System.out.println("Part two: " + numberOfStepsToBasement);
     }
 
-    public static  int countFloor (String input){
+    public static int countFloor(String input) {
         int floor = 0;
-        for (char c:input.toCharArray()){
-            if (c == '('){
+        for (char c : input.toCharArray()) {
+            if (c == '(') {
                 floor++;
             }
-            if (c==')'){
+            if (c == ')') {
                 floor--;
             }
         }
         return floor;
     }
 
-    public static int findNumberOfStepsToBasement (String input){
+    public static int findNumberOfStepsToBasement(String input) {
         int steps = 0;
         int floor = 0;
-        for (char c: input.toCharArray()){
-            if (c=='('){
+        for (char c : input.toCharArray()) {
+            if (c == '(') {
                 floor++;
             }
-            if (c==')'){
+            if (c == ')') {
                 floor--;
             }
             steps++;
-            if (floor==-1){
+            if (floor == -1) {
                 return steps;
             }
         }
