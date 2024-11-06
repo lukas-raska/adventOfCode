@@ -17,9 +17,11 @@ public class Main9 {
 
         RouteManager santasRouteManager = new RouteManager(inputData);
         int minDistance =  santasRouteManager.getShortestDistanceThroughAllTowns();
+        int maxDistance = santasRouteManager.getLongestDistanceThroughAllTowns();
 
         System.out.println("Answer of the day 9: ");
         System.out.println("Part 1: " + minDistance);
+        System.out.println("Part 2: " + maxDistance);
 
 
     }

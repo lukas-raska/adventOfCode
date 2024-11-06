@@ -109,4 +109,13 @@ public class RouteManager {
                 .min()
                 .orElseThrow();
     }
+
+    public int getLongestDistanceThroughAllTowns() {
+        return findPossiblePaths().stream()
+                .mapToInt(this::getDistanceThroughAllTowns)
+                .max()
+                .orElseThrow();
+    }
+
+
 }
