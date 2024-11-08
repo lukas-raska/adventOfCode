@@ -11,7 +11,7 @@ public class Main10 {
 
         System.out.println("Answer of the day 10: ");
         System.out.println("Part 1: " + part1Result.length()); //329356
-        System.out.println("Part 2: " + part2Result.length());
+        System.out.println("Part 2: " + part2Result.length()); //4666278
 
     }
 
