@@ -6,34 +6,16 @@ public class Main11 {
 
         String puzzleInput = "hxbxwxba";
 
-
         PasswordGenerator generator = new PasswordGenerator();
 
-        String currentPassword = puzzleInput;
-
-        Thread timeThread = new Thread(() -> {
-            var startTime = System.currentTimeMillis();
-            while (!Thread.currentThread().isInterrupted()) {
-                try {
-                    Thread.sleep(1);
-                    var elapsedTime = System.currentTimeMillis() - startTime;
-                    System.out.println("Time: " + elapsedTime + " miliseconds");
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }
-
-        });
-
-
-        timeThread.start();
-        while (!generator.isValid(currentPassword)) {
-            currentPassword = generator.incrementPassword(currentPassword);
-        }
-        timeThread.interrupt();
+        String newPasswordPart1 = generator.generateNewPassword(puzzleInput);
+        String newPasswordPart2 = generator.generateNewPassword(newPasswordPart1);
 
         System.out.println("Answer of the day 11:");
-        System.out.println("Part 1: " + currentPassword);
+        System.out.println("Part 1: " + newPasswordPart1);
+        System.out.println("Part 2: " + newPasswordPart2);
+
+
 
     }
 }

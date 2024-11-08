@@ -29,7 +29,7 @@ public class PasswordGenerator {
         return false;
     }
 
-    public boolean isValid(String password) {
+    private boolean isValid(String password) {
 
         int lengthOfStraight = 3;
 
@@ -42,7 +42,7 @@ public class PasswordGenerator {
         return password.matches(".*([a-z])\\1.*([a-z])\\2.*");
     }
 
-    public String incrementPassword(String oldPassword) {
+    private String incrementPassword(String oldPassword) {
 
         StringBuilder newPassword = new StringBuilder(oldPassword);
         char lastLetterInAlphabet = allowedAlphabet.charAt(allowedAlphabet.length() - 1);
@@ -75,5 +75,14 @@ public class PasswordGenerator {
             }
         }
         return newPassword.toString();
+    }
+
+    public String generateNewPassword(String oldPassword){
+        String newPassword = oldPassword;
+        do {
+             newPassword = incrementPassword(newPassword);
+        }        while (!isValid(newPassword));
+
+        return newPassword;
     }
 }
