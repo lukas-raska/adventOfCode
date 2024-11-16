@@ -25,13 +25,15 @@ public record Reindeer(String name,
         return new Reindeer(name, speed, timeToFly, timeToRest);
     }
 
-    public int countDistance(int timeLimit) {
+    public int calculateDistance(int elapsedTime) {
 
         int flyAndRestTime = timeToFly() + timeToRest();
-        int numberOfCycles = timeLimit / flyAndRestTime;
-        int timeLeft = timeLimit - (numberOfCycles * flyAndRestTime);
+        int numberOfCycles = elapsedTime / flyAndRestTime;
+        int timeLeft = elapsedTime - (numberOfCycles * flyAndRestTime);
 
         return (numberOfCycles * timeToFly + Math.min(timeLeft, timeToFly)) * speed;
     }
+
+
 }
 
