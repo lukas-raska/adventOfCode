@@ -14,11 +14,26 @@ public class Recipe {
         this.ingredients = ingredients;
     }
 
+    public int getValueOfCombinationWithGivenCalories(int neededCalories) {
+
+        return findAllCombinationsOfIngredientsByChatGPT().stream()
+                .filter(map -> countCaloriesOfCombination(map) == neededCalories)
+                .mapToInt(this::countValueOfCombination)
+                .max()
+                .orElseThrow();
+    }
+
     public int getBestValuedCombination() {
         return findAllCombinationsOfIngredientsByChatGPT().stream()
                 .mapToInt(this::countValueOfCombination)
                 .max()
                 .orElseThrow();
+    }
+
+    public int countCaloriesOfCombination(Map<Ingredients, Integer> combination) {
+        return combination.entrySet().stream()
+                .mapToInt(entry -> entry.getKey().calories() * entry.getValue())
+                .sum();
     }
 
     public int countValueOfCombination(Map<Ingredients, Integer> combination) {
