@@ -29,9 +29,8 @@ public class Main16 {
         var differencesMap = auntSueClues.stream()
                 .collect(Collectors.toMap(
                         AuntSue::id,
-                        Main16::countDifference)
+                        Main16::countDifferenceForPart1)
                 );
-
 
         int minDiff = differencesMap.values().stream().min(Integer::compareTo).orElseThrow();
         int searchedSueId = differencesMap.entrySet().stream()
@@ -40,14 +39,31 @@ public class Main16 {
                 .findFirst()
                 .orElseThrow();
 
+        //part 2
+        var pointsMap = auntSueClues.stream()
+                .collect(Collectors.toMap(
+                        AuntSue::id,
+                        Main16::countPointsForPart2)
+                );
+
+
+        int maxPoints = pointsMap.values().stream().max(Integer::compareTo).orElseThrow();
+        int searchedSueId2 = pointsMap.entrySet().stream()
+                .filter(entry -> entry.getValue() == maxPoints)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow();
+
         System.out.println("The answer of the day 16:");
         System.out.println("Part 1: " + searchedSueId); //373
+        System.out.println("Part 2: " + searchedSueId2); //260
 
     }
 
-    public static int countDifference(AuntSue sueData) {
+    public static int countDifferenceForPart1(AuntSue sueData) {
 
         int totalDifference = 0;
+
         for (var entry : GIFT_CLUES.entrySet()) {
             String giftClueKey = entry.getKey();
             int giftClueValue = entry.getValue();
@@ -58,5 +74,38 @@ public class Main16 {
             }
         }
         return totalDifference;
+    }
+
+    public static int countPointsForPart2(AuntSue sueData) {
+        int points = 0;
+
+        for (var entry : GIFT_CLUES.entrySet()) {
+
+            String giftClueKey = entry.getKey();
+            int giftClueValue = entry.getValue();
+
+            if (sueData.clues().containsKey(giftClueKey)) {
+
+                int sueClueValue = sueData.clues().get(giftClueKey);
+
+                if (giftClueKey.equals("cats") || giftClueKey.equals("trees")) {
+                    if (sueClueValue > giftClueValue) {
+                        points++;
+                    }
+
+                } else if (giftClueKey.equals("pomeranians") || giftClueKey.equals("goldfish")) {
+                    if (sueClueValue < giftClueValue) {
+                        points++;
+                    }
+
+                } else {
+                    if (sueClueValue == giftClueValue) {
+                        points++;
+                    }
+                }
+            }
+
+        }
+        return points;
     }
 }
