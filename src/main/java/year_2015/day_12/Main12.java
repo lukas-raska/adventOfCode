@@ -11,7 +11,7 @@ public class Main12 {
 
     public static void main(String[] args) throws JsonProcessingException {
 
-        List<String> input = InputLoader.load(2015, 12, "input_2015_12.txt");
+        List<String> input = InputLoader.load(2015, 12);
         String inputString = input.stream().collect(Collectors.joining(" "));
 
         //using Jackson library to parse input string to JSON nodes

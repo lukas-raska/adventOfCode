@@ -22,7 +22,7 @@ public class Main16 {
 
     public static void main(String[] args) {
 
-        var puzzleInput = InputLoader.load(2015, 16, "input_2015_16.txt");
+        var puzzleInput = InputLoader.load(2015, 16);
 
         var auntSueClues = puzzleInput.stream().map(AuntSue::parse).toList();
 

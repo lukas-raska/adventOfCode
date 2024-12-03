@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
         ChristmasLights christmasLights = new ChristmasLights();
-        File inputFile = new File("src/main/java/year_2015/day_6/input.txt");
+        File inputFile = new File("src/main/resources/2015/input_2015_6.txt");
         Scanner scanner = new Scanner(inputFile);
 
         while (scanner.hasNextLine()) {

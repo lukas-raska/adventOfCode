@@ -25,7 +25,7 @@ public class Main {
             System.out.println(data + " is nice? : " + checker.isNice(data,2));
         }
 
-        File input = new File("src/main/java/year_2015/day_5/input.txt");
+        File input = new File("src/main/resources/2015/input_2015_5.txt");
         Scanner scanner = new Scanner(input);
 
         int counter = 0;

@@ -6,7 +6,7 @@ public class Main13 {
 
     public static void main(String[] args) {
 
-        var puzzleInput = InputLoader.load(2015, 13, "input_2015_13.txt");
+        var puzzleInput = InputLoader.load(2015, 13);
 
         TableManager tableManager = new TableManager(new Table(puzzleInput));
 

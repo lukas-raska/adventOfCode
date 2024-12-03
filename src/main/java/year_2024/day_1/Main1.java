@@ -8,7 +8,7 @@ public class Main1 {
 
     public static void main(String[] args) {
 
-        List<String> puzzleInput = InputLoader.load(2024, 1, "puzzle_input_2024_1.txt");
+        List<String> puzzleInput = InputLoader.load(2024, 1);
 
         Day1Solver day1Solver = new Day1Solver(puzzleInput);
         System.out.println("Part 1: " + day1Solver.part1Solution()); //765748

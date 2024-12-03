@@ -11,7 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_8", "input.txt");
+        Path relativePath = Paths.get("src", "main", "resources", "2023", "input_2023_8.txt");
 
         //načtení dat ze zdrojového souboru
         List<String> inputList = new ArrayList<>();

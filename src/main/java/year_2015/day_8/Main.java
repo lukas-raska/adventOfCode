@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        List<String> inputData = InputLoader.load(2015, 8, "inputData.txt");
+        List<String> inputData = InputLoader.load(2015, 8);
 
         int part1result = inputData.stream()
                 .mapToInt(s -> s.length() - removeQuotesAndEscapes(s).length())

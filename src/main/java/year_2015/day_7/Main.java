@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 
 public class Main {
 
-    private final static String SOURCE_PATH = "src/main/java/year_2015/day_7/inputData.txt";
-    private final static String TEST_SOURCE_PATH = "src/main/java/year_2015/day_7/testInput.txt";
+    private final static String SOURCE_PATH = "src/main/resources/2015/input_2015_7.txt";
+
 
     public static void main(String[] args) {
 

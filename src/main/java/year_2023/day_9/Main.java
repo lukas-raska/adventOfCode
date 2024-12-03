@@ -7,13 +7,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_9", "input.txt");
+        Path relativePath = Paths.get("src", "main", "resources", "2023", "input_2023_9.txt");
 
         //načtení dat ze zdrojového souboru
         List<String> fetchedInput = new ArrayList<>();

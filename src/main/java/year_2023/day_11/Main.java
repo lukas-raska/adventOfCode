@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         //načtení dat ze zdrojového souboru
-        Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_11", "input.txt");
+        Path relativePath = Paths.get("src", "main", "resources", "2023", "input_2023_11.txt");
         List<StringBuilder> input = new ArrayList<>();
         try {
             input = Files.readAllLines(relativePath.toAbsolutePath())

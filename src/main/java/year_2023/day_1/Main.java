@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Main {
-    public static final Path relativePath = Paths.get("src", "main", "resources", "input.txt");
+    public static final Path relativePath = Paths.get("src", "main", "resources","2023", "input_2023_1.txt");
 
     public static void main(String[] args) {
 

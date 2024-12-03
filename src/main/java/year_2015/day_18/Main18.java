@@ -8,7 +8,7 @@ public class Main18 {
 
     public static void main(String[] args) {
 
-        var input = InputLoader.load(2015, 18, "puzzle_input_2015_18.txt");
+        var input = InputLoader.load(2015, 18);
         int steps = 100;
 
         //part 1

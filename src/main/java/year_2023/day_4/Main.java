@@ -10,7 +10,7 @@ import java.util.*;
 
 public class Main {
 
-    public static final Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_4", "input.txt");
+    public static final Path relativePath = Paths.get("src", "main", "resources", "2023", "input_2023_4.txt");
 
     public static void main(String[] args) {
 

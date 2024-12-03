@@ -10,10 +10,7 @@ public class Main9 {
 
     public static void main(String[] args) {
 
-        String inputFileName = "input_2015_day9.txt";
-        String testDataFile = "testData_day9.txt";
-
-        List<String> inputData = InputLoader.load(2015, 9, inputFileName);
+        List<String> inputData = InputLoader.load(2015, 9);
 
         RouteManager santasRouteManager = new RouteManager(inputData);
         int minDistance =  santasRouteManager.getShortestDistanceThroughAllTowns();

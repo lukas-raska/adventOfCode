@@ -13,7 +13,7 @@ public class Main17 {
 
         int totalEggnog = 150;
 
-        var containers = InputLoader.load(2015, 17, "input_2015_17.txt")
+        var containers = InputLoader.load(2015, 17)
                 .stream()
                 .mapToInt(Integer::parseInt)
                 .sorted()

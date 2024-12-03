@@ -12,7 +12,7 @@ public class Main {
     public static final int greenMax = 13;
     public static final int blueMax = 14;
 
-    public static final Path relativePath = Paths.get("src", "main", "resources", "input_day2.txt");
+    public static final Path relativePath = Paths.get("src", "main", "resources","2023", "input_2023_2.txt");
 
     public static void main(String[] args) {
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Main {
 
-    public static final Path relativePath = Paths.get("src", "main", "java", "year_2015", "day_1", "input.txt");
+    public static final Path relativePath = Paths.get("src", "main", "resources", "2015",  "input_2015_1.txt");
 
     public static void main(String[] args) {
 

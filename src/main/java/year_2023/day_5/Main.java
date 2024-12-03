@@ -6,16 +6,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.stream.LongStream;
 
 public class Main {
 
-    public static Path relativePath = Paths.get("src", "main", "java", "year_2023", "day_5", "input.txt");
+    public static Path relativePath = Paths.get("src", "main", "resources", "2023", "input_2023_5.txt");
 
     public static void main(String[] args) {
         LocalDateTime start = LocalDateTime.now();

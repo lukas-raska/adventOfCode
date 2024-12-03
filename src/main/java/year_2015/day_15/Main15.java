@@ -9,7 +9,7 @@ public class Main15 {
 
     public static void main(String[] args) {
 
-        List<String> puzzleInput = InputLoader.load(2015, 15, "puzzle_input_2015_15.txt");
+        List<String> puzzleInput = InputLoader.load(2015, 15);
 
         List<Ingredients> ingredients = puzzleInput.stream()
                 .map(Ingredients::parse)
