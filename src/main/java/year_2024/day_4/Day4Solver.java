@@ -21,7 +21,7 @@ public class Day4Solver {
                 char current = this.input.get(row).charAt(col);
                 if (current == SEARCH_WORD_PART_1.charAt(0)) {
                     for (Direction direction : Direction.values()) {
-                        count += countOccurrencesInDirection(direction, row, col);
+                        count += foundInDirection(direction, row, col) ? 1 : 0;
                     }
                 }
             }
@@ -51,10 +51,10 @@ public class Day4Solver {
         return count;
     }
 
-    private int countOccurrencesInDirection(Direction direction,
-                                            int fromRow,
-                                            int fromCol) {
-        int count = 0;
+    private boolean foundInDirection(Direction direction,
+                                     int fromRow,
+                                     int fromCol) {
+
         int dx = direction.getDx();
         int dy = direction.getDy();
         char next;
@@ -68,11 +68,7 @@ public class Day4Solver {
             next = this.input.get(fromRow).charAt(fromCol);
             found.append(next);
         }
-        if (found.toString().equals(SEARCH_WORD_PART_1)) {
-            count++;
-        }
-
-        return count;
+        return found.toString().equals(SEARCH_WORD_PART_1);
     }
 
     private boolean isHittingBorder(Direction direction,
