@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Day7Solver {
 
-    private List<Equation> equations;
+    private final List<Equation> equations;
 
 
     public Day7Solver(List<String> puzzleInput) {
@@ -22,17 +22,13 @@ public class Day7Solver {
                 .sum();
     }
 
-    public long solvePart2(){
+    public long solvePart2() {
         return this.equations.stream()
                 .filter(equation -> equation.isValid(true))
                 .mapToLong(Equation::result)
                 .sum();
     }
 
-
-    public List<Equation> getEquations() {
-        return equations;
-    }
 
     public Equation parseInput(String inputData) {
         String[] split = inputData.split(":");
