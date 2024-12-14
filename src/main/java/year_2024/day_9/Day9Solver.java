@@ -1,7 +1,7 @@
 package year_2024.day_9;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Day9Solver {
@@ -18,6 +18,74 @@ public class Day9Solver {
         return checkSum(compacted);
     }
 
+    public long solvePart2() {
+        var sorted = sortFileSystem();
+        int id = getMaxUsedId(sorted);
+        while (id > 0) {
+            int fileLength = getLengthOfFileWithId(id, sorted);
+            int indexOfFreeSpace = indexOfAvailableFreeSpace(fileLength, sorted);
+            if (indexOfFreeSpace != -1) {
+                moveFileToAvailableFreeSpace(indexOfFreeSpace, id, fileLength, sorted);
+            }
+            id--;
+        }
+        return checkSum(sorted);
+    }
+
+    public void moveFileToAvailableFreeSpace(int indexOfFreeSpace,
+                                             int fileId,
+                                             int fileLength,
+                                             List<Integer> fileSystem) {
+        int indexOfFile = fileSystem.indexOf(fileId);
+        for (int i = 0; i < fileLength; i++) {
+            if (indexOfFreeSpace < indexOfFile) {
+                Collections.swap(fileSystem, i + indexOfFreeSpace, i + indexOfFile);
+            }
+
+        }
+    }
+
+    public int getMaxUsedId(List<Integer> sortedFileSystem) {
+        int index = sortedFileSystem.size() - 1;
+        int maxId = 0;
+        while (index >= 0 || sortedFileSystem.getLast() == -1) {
+            maxId = sortedFileSystem.getLast();
+            index--;
+        }
+        return maxId;
+    }
+
+    public int indexOfAvailableFreeSpace(int fileLength,
+                                         List<Integer> fileSystem) {
+        int freeSpaceCounter = 0;
+        int indexOfFreeSpace = -1;
+        boolean freeSpaceFound = false;
+        for (int i = 0; i < fileSystem.size() - fileLength; i++) {
+            if (fileSystem.get(i) == -1) {
+                if (!freeSpaceFound) {
+                    indexOfFreeSpace = i;
+                    freeSpaceFound = true;
+                }
+                freeSpaceCounter++;
+                if (freeSpaceCounter == fileLength) {
+                    return indexOfFreeSpace;
+                }
+            } else {
+                freeSpaceCounter = 0;
+                indexOfFreeSpace = -1;
+                freeSpaceFound = false;
+            }
+        }
+        return indexOfFreeSpace;
+    }
+
+    public int getLengthOfFileWithId(int id,
+                                     List<Integer> fileSystem) {
+        return (int) fileSystem.stream()
+                .filter(f -> f == id)
+                .count();
+    }
+
 
     public void printList(List<Integer> list) {
         for (var n : list) {
@@ -26,17 +94,14 @@ public class Day9Solver {
         System.out.println();
     }
 
-    private List<Integer> sortFileSystem() {
-        int id = 0;
-        List<Integer> fileSystem = new LinkedList<>();
-
+    public List<Integer> sortFileSystem() {
+        List<Integer> fileSystem = new ArrayList<>(diskMap.length());
         for (int i = 0; i < this.diskMap.length(); i++) {
             if (i % 2 == 0) {
                 int files = valueAt(i);
                 for (int j = 0; j < files; j++) {
-                    fileSystem.add(id);
+                    fileSystem.add(i / 2);
                 }
-                id++;
             } else {
                 int freeSpace = valueAt(i);
                 for (int j = 0; j < freeSpace; j++) {
@@ -44,52 +109,41 @@ public class Day9Solver {
                 }
             }
         }
-//        int controlCheckSum = fileSystem.stream().mapToInt(Integer::intValue).sum();
-//        long countOfMinusOnes = fileSystem.stream().filter(n -> n == -1).count();
-//        long countOfNonMinusOnes
-//                = fileSystem.stream().filter(n -> n != -1).count();
-//        System.out.println("SortFileSystem method: ");
-//        System.out.println("Control checksum: " + controlCheckSum);
-//        System.out.println("Number of -1: " + countOfMinusOnes);
-//        System.out.println("Number of non -1: " + countOfNonMinusOnes);
-
-
         return fileSystem;
     }
 
 
-    private List<Integer> compactFileSystem(List<Integer> sortedFileSystem) {
+    public List<Integer> compactFileSystem(List<Integer> sortedFileSystem) {
 
         int leftPointer = 0;
         int rightPointer = sortedFileSystem.size() - 1;
         while (leftPointer < rightPointer) {
             if (sortedFileSystem.get(leftPointer) == -1) {
-                while (sortedFileSystem.get(rightPointer) == -1) {
-                    rightPointer--;
-                }
                 Collections.swap(sortedFileSystem, leftPointer, rightPointer);
-                rightPointer--;
-
+                do {
+                    rightPointer--;
+                } while (sortedFileSystem.get(rightPointer) == -1);
             }
             leftPointer++;
         }
-
-//        int controlCheckSum = sortedFileSystem.stream().mapToInt(Integer::intValue).sum();
-//        long numberOfMinusOnes = sortedFileSystem.stream().filter(n -> n == -1).count();
-//        long numberOfNonMinusOnes = sortedFileSystem.stream().filter(n -> n != -1).count();
-//        System.out.println("compactFileSystem method: ");
-//        System.out.println("Control checksum: " + controlCheckSum);
-//        System.out.println("Number of -1: " + numberOfMinusOnes);
-//        System.out.println("Number of non -1: " + numberOfNonMinusOnes);
-
         return sortedFileSystem;
+    }
+
+    private long checkSum2(List<Integer> compacted) {
+        long checkSum = 0;
+        int pos = 0;
+        while (pos <= compacted.size() - 1 && compacted.get(pos) != -1) {
+            checkSum += (long) pos * compacted.get(pos++);
+        }
+        return checkSum;
     }
 
     private long checkSum(List<Integer> compacted) {
         long checkSum = 0;
         int pos = 0;
-        while (pos <= compacted.size() - 1 && compacted.get(pos) != -1) {
-            checkSum += (long) pos * compacted.get(pos++);
+        while (pos <= compacted.size() - 1) {
+            int value = (compacted.get(pos) == -1) ? 0 : compacted.get(pos);
+            checkSum += (long) pos++ * value;
         }
         return checkSum;
     }
