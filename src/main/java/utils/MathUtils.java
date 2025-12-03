@@ -33,4 +33,17 @@ public class MathUtils {
             }
         }
     }
+
+    public static long digitsToNumber(int[] digits){
+        long result = 0;
+        long pow = 1;
+        for (int i = digits.length-1; i>=0 ; i--) {
+            result += (digits[i]*pow);
+            pow*=10;
+        }
+        return result;
+    }
    }
+
+
+
