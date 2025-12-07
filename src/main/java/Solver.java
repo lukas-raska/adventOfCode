@@ -1,4 +1,4 @@
-public interface Solver<T1, T2> {
+public interface Solver {
 
     <T> T part1();
 
