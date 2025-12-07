@@ -1,6 +1,6 @@
 package year_2015.day_17;
 
-import utils.InputLoader;
+import common.utils.InputLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;

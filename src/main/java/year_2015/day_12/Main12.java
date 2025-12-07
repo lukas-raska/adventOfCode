@@ -2,7 +2,7 @@ package year_2015.day_12;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import utils.InputLoader;
+import common.utils.InputLoader;
 
 import java.util.List;
 import java.util.stream.Collectors;

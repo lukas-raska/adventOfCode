@@ -1,6 +1,6 @@
 package year_2025.day_3;
 
-import utils.InputLoader;
+import common.utils.InputLoader;
 
 public class Main3 {
 

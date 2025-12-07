@@ -1,6 +1,6 @@
 package year_2025.day_1;
 
-import utils.InputLoader;
+import common.utils.InputLoader;
 
 import java.util.List;
 

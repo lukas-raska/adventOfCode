@@ -1,6 +1,6 @@
 package year_2025.day_3;
 
-import utils.MathUtils;
+import common.utils.MathUtils;
 
 import java.util.List;
 

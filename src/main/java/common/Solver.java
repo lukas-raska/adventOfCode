@@ -1,16 +1,18 @@
-public interface Solver {
+package common;
 
-    <T> T part1();
+public interface Solver<T1,T2> {
 
-    <T> T part2();
+     T1 part1();
 
-    default <T> void printSolution() {
+     T2 part2();
+
+    default  void printSolution() {
         long start = System.nanoTime();
-        T result1 = part1();
+        T1 result1 = part1();
         long elapsedMillis = Math.round((System.nanoTime() - start) / 1_000_000.);
         System.out.println("Part 1: " + result1 + " (elapsed: " + elapsedMillis + ")");
         start = System.nanoTime();
-        T result2 = part2();
+        T2 result2 = part2();
         elapsedMillis = Math.round((System.nanoTime() - start) / 1_000_000.);
         System.out.println("Part 2: " + result2 + " (elapsed: " + elapsedMillis + ")");
     }

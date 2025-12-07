@@ -1,6 +1,6 @@
 package year_2015.day_16;
 
-import utils.InputLoader;
+import common.utils.InputLoader;
 
 import java.util.Map;
 import java.util.stream.Collectors;
