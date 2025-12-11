@@ -1,5 +1,8 @@
 package year_2025.day_7;
 
+import common.Solver;
+import common.utils.InputLoader;
+
 public class Main7 {
 
     public static void main(String[] args) {
@@ -21,5 +24,11 @@ public class Main7 {
                 ...............
                 .^.^.^.^.^...^.
                 ...............""";
+
+        Solver<Integer,Long> testSolver = new Day7Solver(testData.lines().toList());
+        testSolver.printSolution();
+
+        Solver<Integer, Long> solver = new Day7Solver(InputLoader.load(2025,7));
+        solver.printSolution();
     }
 }
