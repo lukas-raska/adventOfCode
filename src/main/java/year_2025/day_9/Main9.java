@@ -1,6 +1,7 @@
 package year_2025.day_9;
 
 import common.Solver;
+import common.utils.InputLoader;
 
 public class Main9 {
 
@@ -16,14 +17,16 @@ String testData = """
         2,3
         7,3""";
 
-        Solver<Long,Long> testSolver = new Day9Solver(testData.lines().toList());
-        testSolver.printSolution();
+//        Solver<Long,Long> testSolver = new Day9Solver(testData.lines().toList());
+//        testSolver.printSolution();
 
 //        Solver<Long,Long> solver = new AlternativeSolverForPart2(InputLoader.load(2025,9));
 //        solver.printSolution();
 
-//        Solver<Long,Long> solver = new Day9Solver(InputLoader.load(2025,9));
-//        solver.printSolution();
+        Solver<Long,Long> solver = new Day9Solver(InputLoader.load(2025,9));
+        solver.printSolution();
+
+        //74419162
 
 
 

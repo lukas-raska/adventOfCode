@@ -3,7 +3,6 @@ package year_2025.day_9;
 import common.Solver;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Predicate;
@@ -11,14 +10,16 @@ import java.util.function.Predicate;
 public class Day9Solver implements Solver<Long, Long> {
 
     private final List<Point> corners;
-    private final List<Point> edges;
+    private List<Point> edges;
 
     public Day9Solver(List<String> puzzleInput) {
         this.corners = puzzleInput.stream()
                 .map(Point::parse)
+                .map(point -> {
+                    point.setType(Point.Type.CORNER);
+                    return point;
+                })
                 .toList();
-        this.corners.forEach(point -> point.setType(Point.Type.CORNER));
-        this.edges = getDefinedEdges();
     }
 
 
@@ -43,7 +44,7 @@ public class Day9Solver implements Solver<Long, Long> {
 
     @Override
     public Long part2() {
-        specifyEdgesType();
+        this.edges = getDefinedEdges();
         long maxArea = 0;
         for (Point corner : corners) {
             var oppositeCorner = findOppositeCorner(corner);
@@ -116,89 +117,6 @@ public class Day9Solver implements Solver<Long, Long> {
 
     }
 
-    private void specifyEdgesType() {
-        int minCol = corners.stream().mapToInt(Point::getCol).min().orElseThrow();
-        int maxCol = corners.stream().mapToInt(Point::getCol).max().orElseThrow();
-        int minRow = corners.stream().mapToInt(Point::getRow).min().orElseThrow();
-        int maxRow = corners.stream().mapToInt(Point::getRow).max().orElseThrow();
-        //specify vertical edge location (LEFT,RIGHT)
-        for (int row = minRow; row <= maxRow; row++) {
-            List<Point> pointsInCurrentRow = getCornersAndEdgesInRow(row);
-            pointsInCurrentRow.sort(Comparator.comparing(Point::getCol));
-            boolean inside = false;
-            boolean touchHorizontalEdge = false;
-            for (Point point : pointsInCurrentRow) {
-                if (point.isEdge()) {
-                    point.setLocation(inside ? Point.Location.RIGHT : Point.Location.LEFT);
-                    inside = !inside;
-                }
-                if (point.isCorner()) {
-                    if (!touchHorizontalEdge) {
-                        touchHorizontalEdge = true;
-                    } else {
-                        inside = true;
-                        touchHorizontalEdge = false;
-                    }
-                }
-            }
-        }
-        //specify horizontal edge location (UP,DOWN)
-        for (int col = minCol; col <= maxCol; col++) {
-            List<Point> pointsInCurrentCol = getCornersAndEdgesInCol(col);
-            pointsInCurrentCol.sort(Comparator.comparing(Point::getRow));
-            boolean inside = false;
-            boolean touchVerticalEdge = false;
-            for (Point point : pointsInCurrentCol) {
-                if (point.isEdge()) {
-                    point.setLocation(inside ? Point.Location.DOWN : Point.Location.UP);
-                    inside = !inside;
-                }
-                if (point.isCorner()) {
-                    if (!touchVerticalEdge) {
-                        touchVerticalEdge = true;
-                    } else {
-                        inside = true;
-                        touchVerticalEdge = false;
-                    }
-                }
-            }
-
-        }
-    }
-
-    private List<Point> getCornersAndEdgesInRow(int row) {
-
-        var filteredCorners = corners.stream()
-                .filter(point -> point.getRow() == row)
-                .toList();
-        var filteredEdges = edges.stream()
-                .filter(point -> point.getRow() == row)
-                .filter(point -> point.getOrientation().equals(Point.Orientation.VERTICAL))
-                .toList();
-
-        List<Point> points = new ArrayList<>(filteredCorners);
-        points.addAll(filteredEdges);
-
-        return points;
-    }
-
-    private List<Point> getCornersAndEdgesInCol(int col) {
-
-        var filteredCorners = corners.stream()
-                .filter(point -> point.getCol() == col)
-                .toList();
-        var filteredEdges = edges.stream()
-                .filter(point -> point.getCol() == col)
-                .filter(point -> point.getOrientation().equals(Point.Orientation.HORIZONTAL))
-                .toList();
-
-        List<Point> points = new ArrayList<>(filteredCorners);
-        points.addAll(filteredEdges);
-
-        return points;
-    }
-
-
     private List<Point> getDefinedEdges() {
         Point start = corners.getFirst();
         int size = corners.size();
@@ -209,7 +127,9 @@ public class Day9Solver implements Solver<Long, Long> {
             current = corners.get(index % size);
             next = corners.get((index + 1) % size);
             index++;
-            if (hasSameColumn(current, next)) {
+            boolean hasSameColumn = current.getCol() == next.getCol();
+            boolean hasSameRow = current.getRow() == next.getRow();
+            if (hasSameColumn) {
                 int startAt = Math.min(current.getRow(), next.getRow()) + 1;
                 int endAt = Math.max(current.getRow(), next.getRow()) - 1;
                 for (int row = startAt; row <= endAt; row++) {
@@ -218,11 +138,12 @@ public class Day9Solver implements Solver<Long, Long> {
                                     row,
                                     current.getCol(),
                                     Point.Type.EDGE,
-                                    Point.Orientation.VERTICAL)
+                                    Point.Orientation.VERTICAL,
+                                    (next.getRow() - current.getRow()) > 0 ? Point.Location.RIGHT : Point.Location.LEFT)
                     );
                 }
             }
-            if (hasSameRow(current, next)) {
+            if (hasSameRow) {
                 int startAt = Math.min(current.getCol(), next.getCol()) + 1;
                 int endAt = Math.max(current.getCol(), next.getCol()) - 1;
                 for (int col = startAt; col <= endAt; col++) {
@@ -231,7 +152,8 @@ public class Day9Solver implements Solver<Long, Long> {
                                     current.getRow(),
                                     col,
                                     Point.Type.EDGE,
-                                    Point.Orientation.HORIZONTAL)
+                                    Point.Orientation.HORIZONTAL,
+                                    (next.getCol() - current.getCol()) > 0 ? Point.Location.UP : Point.Location.DOWN)
                     );
                 }
             }
@@ -240,18 +162,6 @@ public class Day9Solver implements Solver<Long, Long> {
 
         return edges;
     }
-
-
-    private boolean hasSameRow(Point a,
-                               Point b) {
-        return a.getRow() == b.getRow();
-    }
-
-    private boolean hasSameColumn(Point a,
-                                  Point b) {
-        return a.getCol() == b.getCol();
-    }
-
 
     enum Direction {
         UP(-1, 0),

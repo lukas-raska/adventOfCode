@@ -28,6 +28,16 @@ public class Point {
         this.location = Location.UNDEFINED;
     }
 
+    public Point (int row, int col, Type type, Orientation orientation, Location location){
+        this.row = row;
+        this.col = col;
+        this.type = type;
+        this.orientation = orientation;
+        this.location = location;
+    }
+
+
+
     public int getRow() {
         return row;
     }
