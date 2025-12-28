@@ -2,15 +2,16 @@ package year_2025.day_9;
 
 import common.Solver;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class Day9Solver implements Solver<Long, Long> {
 
     private final List<Point> corners;
     private List<Point> edges;
+
+    private Set<Point> edgesSet;
 
     public Day9Solver(List<String> puzzleInput) {
         this.corners = puzzleInput.stream()
@@ -21,7 +22,6 @@ public class Day9Solver implements Solver<Long, Long> {
                 })
                 .toList();
     }
-
 
     @Override
     public Long part1() {
@@ -47,75 +47,134 @@ public class Day9Solver implements Solver<Long, Long> {
         this.edges = getDefinedEdges();
         long maxArea = 0;
         for (Point corner : corners) {
-            var oppositeCorner = findOppositeCorner(corner);
-            long width = 1 + Math.abs(corner.getCol() - oppositeCorner.getCol());
-            long height = 1 + Math.abs(corner.getRow() - oppositeCorner.getRow());
-            maxArea = Math.max(maxArea, width * height);
+            maxArea = Math.max(maxArea,getLocalMaxArea(corner));
         }
         return maxArea;
     }
 
-    private Point findOppositeCorner(Point corner) {
-        var dir = getCornerExpansion(corner);
-        int startRow = corner.getRow();
-        int startCol = corner.getCol();
-        long minDistance = Long.MAX_VALUE;
-        Point nearest = corner;
+    private Set<Direction> possibleCornerExpansions(Point corner) {
 
-        for (var testedCorner : corners) {
-            if (testedCorner.equals(corner)) {
-                continue;
+        Map<Direction, Point> adjacentEdges = new HashMap<>();
+        Set<Direction> possibleDirections = new HashSet<>();
+
+        for (Direction direction : EnumSet.of(
+                Direction.UP,
+                Direction.RIGHT,
+                Direction.DOWN,
+                Direction.LEFT
+        )) {
+            int nextRow = corner.getRow() + direction.dRow;
+            int nextCol = corner.getCol() + direction.dCol;
+
+            for (Point edge : edges) {
+                if (edge.getRow() == nextRow && edge.getCol() == nextCol) {
+                    adjacentEdges.put(direction, edge);
+                }
+                if (adjacentEdges.size() == 2) {
+                    break;
+                }
             }
-            int row = testedCorner.getRow();
-            int col = testedCorner.getCol();
-            Predicate<Point> isOppositePredicate = switch (dir) {
-                case UP_LEFT -> point -> point.getRow() < corner.getRow() && point.getCol() < corner.getCol();
-                case UP_RIGHT -> point -> point.getRow() < corner.getRow() && point.getCol() > corner.getCol();
-                case DOWN_LEFT -> point -> point.getRow() > corner.getRow() && point.getCol() < corner.getCol();
-                case DOWN_RIGHT -> point -> point.getRow() > corner.getRow() && point.getCol() > corner.getCol();
-                default -> throw new IllegalArgumentException("Invalid corner direction: " + dir);
+
+            Set<Point.Location> adjacentEdgeLocations = adjacentEdges.values().stream()
+                    .map(Point::getLocation)
+                    .collect(Collectors.toSet());
+
+
+            //TOP,LEFT
+            if (adjacentEdgeLocations.contains(Point.Location.UP) && adjacentEdgeLocations.contains(Point.Location.LEFT)) {
+                possibleDirections.add(Direction.DOWN_RIGHT);
+                if (adjacentEdges.containsKey(Direction.UP) && adjacentEdges.containsKey(Direction.LEFT)) {
+                    possibleDirections.add(Direction.DOWN_LEFT);
+                    possibleDirections.add(Direction.UP_RIGHT);
+                }
+            }
+            //TOP,RIGHT
+            if (adjacentEdgeLocations.contains(Point.Location.UP) && adjacentEdgeLocations.contains(Point.Location.RIGHT)) {
+                possibleDirections.add(Direction.DOWN_LEFT);
+                if (adjacentEdges.containsKey(Direction.UP) && adjacentEdges.containsKey(Direction.RIGHT)) {
+                    possibleDirections.add(Direction.DOWN_RIGHT);
+                    possibleDirections.add(Direction.UP_LEFT);
+                }
+            }
+            //DOWN, LEFT
+            if (adjacentEdgeLocations.contains(Point.Location.DOWN) && adjacentEdgeLocations.contains(Point.Location.LEFT)) {
+                possibleDirections.add(Direction.UP_RIGHT);
+                if (adjacentEdges.containsKey(Direction.DOWN) && adjacentEdges.containsKey(Direction.LEFT)) {
+                    possibleDirections.add(Direction.UP_LEFT);
+                    possibleDirections.add(Direction.DOWN_RIGHT);
+                }
+            }
+            //DOWN, RIGHT
+            if (adjacentEdgeLocations.contains(Point.Location.DOWN) && adjacentEdgeLocations.contains(Point.Location.RIGHT)) {
+                possibleDirections.add(Direction.UP_LEFT);
+                if (adjacentEdges.containsKey(Direction.DOWN) && adjacentEdges.containsKey(Direction.RIGHT)) {
+                    possibleDirections.add(Direction.UP_RIGHT);
+                    possibleDirections.add(Direction.DOWN_LEFT);
+                }
+            }
+
+        }
+        return possibleDirections;
+    }
+
+    private long getLocalMaxArea(Point corner) {
+
+        long maxArea = 0L;
+
+        for (var direction : possibleCornerExpansions(corner)) {
+
+            Predicate<Point> isOppositePredicate = switch (direction) {
+                case UP_LEFT -> point -> point.getRow() <= corner.getRow() && point.getCol() <= corner.getCol();
+                case UP_RIGHT -> point -> point.getRow() <= corner.getRow() && point.getCol() >= corner.getCol();
+                case DOWN_LEFT -> point -> point.getRow() >= corner.getRow() && point.getCol() <= corner.getCol();
+                case DOWN_RIGHT -> point -> point.getRow() >= corner.getRow() && point.getCol() >= corner.getCol();
+                default -> throw new IllegalArgumentException("Invalid corner direction: " + direction);
             };
-            if (isOppositePredicate.test(testedCorner)) {
-                long distance = (long) (startCol - col) * (startCol - col) + (long) (startRow - row) * (startRow - row);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    nearest = testedCorner;
+
+            for (var testedCorner : corners) {
+                if (testedCorner.equals(corner)) {
+                    continue;
+                }
+
+                if (isOppositePredicate.test(testedCorner) && isValidArea(corner, testedCorner)) {
+                    long width = 1 + Math.abs(testedCorner.getCol() - corner.getCol());
+                    long height = 1 + Math.abs(testedCorner.getRow() - corner.getRow());
+                    maxArea = Math.max(maxArea, width * height);
                 }
             }
         }
-        return nearest;
 
+        return maxArea;
     }
 
+    private boolean isValidArea(Point start,
+                                Point opposite) {
 
-    private Direction getCornerExpansion(Point corner) {
-
-        StringBuilder adjacent = new StringBuilder();
-        for (Direction direction : EnumSet.of(
-                Direction.DOWN,
-                Direction.UP,
-                Direction.LEFT,
-                Direction.RIGHT)) {
-            int neighborRow = corner.getRow() + direction.dRow;
-            int neighborCol = corner.getCol() + direction.dCol;
-
-            var optLocation = edges.stream()
-                    .filter(p -> p.getRow() == neighborRow && p.getCol() == neighborCol)
-                    .map(Point::getLocation)
-                    .findFirst();
-
-            optLocation.ifPresent(adjacent::append);
+        if (start.getRow() == opposite.getRow()) {
+            return start.getCol() != opposite.getCol();
         }
-
-        return switch (adjacent.toString().toUpperCase()) {
-            case "UPLEFT", "LEFTUP" -> Direction.DOWN_RIGHT;
-            case "UPRIGHT", "RIGHTUP" -> Direction.DOWN_LEFT;
-            case "DOWNLEFT", "LEFTDOWN" -> Direction.UP_RIGHT;
-            case "DOWNRIGHT", "RIGHTDOWN" -> Direction.UP_LEFT;
-            default -> throw new IllegalArgumentException("Unknown adjacent edges: " + adjacent);
+        if (start.getCol() == opposite.getCol()) {
+            return start.getRow() != opposite.getRow();
+        }
+        int leftBottomCol = Math.min(start.getCol(), opposite.getCol());
+        int leftBottomRow = Math.max(start.getRow(), opposite.getRow());
+        int rightTopCol = Math.max(start.getCol(), opposite.getCol());
+        int rightTopRow = Math.min(start.getRow(), opposite.getRow());
+        Predicate<Point> invalidAreaPredicate = p -> {
+            boolean isCrossedHorizontally =
+                    (p.getCol() == leftBottomCol || p.getCol() == rightTopCol) && p.getRow() < leftBottomRow && p.getRow() >rightTopRow;
+            boolean isCrossedVertically =
+                    (p.getRow() == leftBottomRow || p.getRow() == rightTopRow) && p.getCol() > leftBottomCol && p.getCol() < rightTopCol;
+            boolean anyEdgeInside =
+                    p.getCol() > leftBottomCol && p.getCol() < rightTopCol && p.getRow() < leftBottomRow && p.getRow() > rightTopRow;
+            return (p.isVerticalEdge() && isCrossedVertically) || (p.isHorizontalEdge() && isCrossedHorizontally) || anyEdgeInside;
         };
 
+
+        List<Point> crossingEdges = edges.stream().filter(invalidAreaPredicate).toList();
+        return crossingEdges.isEmpty();
     }
+
 
     private List<Point> getDefinedEdges() {
         Point start = corners.getFirst();
@@ -127,9 +186,7 @@ public class Day9Solver implements Solver<Long, Long> {
             current = corners.get(index % size);
             next = corners.get((index + 1) % size);
             index++;
-            boolean hasSameColumn = current.getCol() == next.getCol();
-            boolean hasSameRow = current.getRow() == next.getRow();
-            if (hasSameColumn) {
+            if (current.getCol() == next.getCol()) {
                 int startAt = Math.min(current.getRow(), next.getRow()) + 1;
                 int endAt = Math.max(current.getRow(), next.getRow()) - 1;
                 for (int row = startAt; row <= endAt; row++) {
@@ -137,13 +194,12 @@ public class Day9Solver implements Solver<Long, Long> {
                             new Point(
                                     row,
                                     current.getCol(),
-                                    Point.Type.EDGE,
-                                    Point.Orientation.VERTICAL,
+                                    Point.Type.VERTICAL_EDGE,
                                     (next.getRow() - current.getRow()) > 0 ? Point.Location.RIGHT : Point.Location.LEFT)
                     );
                 }
             }
-            if (hasSameRow) {
+            if (current.getRow() == next.getRow()) {
                 int startAt = Math.min(current.getCol(), next.getCol()) + 1;
                 int endAt = Math.max(current.getCol(), next.getCol()) - 1;
                 for (int col = startAt; col <= endAt; col++) {
@@ -151,8 +207,7 @@ public class Day9Solver implements Solver<Long, Long> {
                             new Point(
                                     current.getRow(),
                                     col,
-                                    Point.Type.EDGE,
-                                    Point.Orientation.HORIZONTAL,
+                                    Point.Type.HORIZONTAL_EDGE,
                                     (next.getCol() - current.getCol()) > 0 ? Point.Location.UP : Point.Location.DOWN)
                     );
                 }

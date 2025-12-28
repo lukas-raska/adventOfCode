@@ -4,38 +4,30 @@ public class Point {
     private final int row;
     private final int col;
     private Type type;
-    private Orientation orientation;
     private Location location;
-
 
 
     public Point(int row,
                  int col) {
-        this(row,col,Type.UNDEFINED);
+        this(row, col, Type.UNDEFINED);
     }
+
 
     public Point(int row,
                  int col,
                  Type type) {
-       this(row,col, type, Orientation.UNDEFINED);
+        this(row, col, type, Location.UNDEFINED);
     }
 
-    public Point (int row, int col, Type type, Orientation orientation){
+    public Point(int row,
+                 int col,
+                 Type type,
+                 Location location) {
         this.row = row;
         this.col = col;
         this.type = type;
-        this.orientation = orientation;
-        this.location = Location.UNDEFINED;
-    }
-
-    public Point (int row, int col, Type type, Orientation orientation, Location location){
-        this.row = row;
-        this.col = col;
-        this.type = type;
-        this.orientation = orientation;
         this.location = location;
     }
-
 
 
     public int getRow() {
@@ -46,14 +38,6 @@ public class Point {
         return col;
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public Orientation getOrientation() {
-        return orientation;
-    }
-
     public Location getLocation() {
         return location;
     }
@@ -62,36 +46,25 @@ public class Point {
         this.type = type;
     }
 
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public enum Type {
         CORNER,
-        EDGE,
-        INNER,
-        OUTER,
+        VERTICAL_EDGE,
+        HORIZONTAL_EDGE,
         UNDEFINED
     }
 
-    public enum Orientation {
-        VERTICAL, HORIZONTAL, UNDEFINED
-    }
 
     public enum Location {
         UP, DOWN, LEFT, RIGHT, UNDEFINED
     }
 
-    public boolean isCorner(){
-        return this.type.equals(Type.CORNER);
+
+    public boolean isVerticalEdge() {
+        return this.type.equals(Type.VERTICAL_EDGE);
     }
 
-    public boolean isEdge(){
-        return this.type.equals(Type.EDGE);
+    public boolean isHorizontalEdge() {
+        return this.type.equals(Type.HORIZONTAL_EDGE);
     }
 
 
@@ -121,10 +94,6 @@ public class Point {
     @Override
     public String toString() {
         return "[" + row + ":" + col + "]";
-    }
-
-    public static Point of(int row, int col){
-        return new Point(row, col);
     }
 }
 
