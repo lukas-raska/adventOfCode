@@ -1,39 +1,27 @@
 package year_2025.day_10;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
-public record Machine(String lights, List<int[]> buttons, int[] joltage) {
+
+public record Machine(String lights, int[][] buttons, int[] joltage) {
+
+    private static int[] parseIntArray(String data) {
+        return Arrays.stream(data.trim().split(","))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
 
     public static Machine parse(String data) {
-        String lights = null;
-        List<int[]> buttons = null;
-        int[] joltage = null;
-        for (String s : data.split(" ")) {
-            if (s.startsWith("[")) {
-                lights = s.replaceAll("[\\[\\]]", "");
 
-            }
-            if (s.startsWith("(")) {
-                int[] button = Arrays.stream(s.replaceAll("[()]", "").split(","))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-                if (buttons == null) {
-                    buttons = new ArrayList<>();
-                }
-                buttons.add(button);
-            }
-            if (s.startsWith("{")) {
-                joltage = Arrays.stream(s.replaceAll("[{}]", "").split(","))
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-            }
-        }
-        Objects.requireNonNull(lights);
-        Objects.requireNonNull(joltage);
-        Objects.requireNonNull(buttons);
+        String lights = data.substring(data.indexOf("[") + 1, data.indexOf("]"));
+
+        String buttonsData = data.substring(data.indexOf("(") + 1, data.lastIndexOf(")")).replaceAll("[)(]", "");
+        int[][] buttons = Arrays.stream(buttonsData.trim().split(" "))
+                .map(Machine::parseIntArray)
+                .toArray(int[][]::new);
+
+        String joltageData = data.substring(data.indexOf("{") + 1, data.indexOf("}"));
+        int[] joltage = parseIntArray(joltageData);
 
         return new Machine(lights, buttons, joltage);
     }
